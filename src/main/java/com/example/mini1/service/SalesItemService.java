@@ -5,6 +5,9 @@ import com.example.mini1.dto.SalesItemInDto;
 import com.example.mini1.dto.SalesItemOutDto;
 import com.example.mini1.dto.SalesItemPageDto;
 import com.example.mini1.entity.SalesItemEntity;
+import com.example.mini1.exception.ImageUpdateException;
+import com.example.mini1.exception.ItemNotFoundException;
+import com.example.mini1.exception.NotMatchedPasswordException;
 import com.example.mini1.repository.SalesItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +27,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -63,7 +65,7 @@ public class SalesItemService {
         Optional<SalesItemEntity> optionalEntity = repository.findById(id);
 
         if(optionalEntity.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ItemNotFoundException();
 
         return SalesItemOutDto.fromEntity(optionalEntity.get());
     }
@@ -73,7 +75,7 @@ public class SalesItemService {
         Optional<SalesItemEntity> optionalEntity = repository.findById(id);
 
         if(optionalEntity.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ItemNotFoundException();
 
         SalesItemEntity entity = optionalEntity.get();
         entity.setTitle(dto.getTitle());
@@ -93,33 +95,32 @@ public class SalesItemService {
         Optional<SalesItemEntity> optionalEntity = repository.findById(id);
 
         if(optionalEntity.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ItemNotFoundException();
 
         ResponseDto response = new ResponseDto();
         SalesItemEntity entity = optionalEntity.get();
 
-        if(entity.getWriter().equals(dto.getWriter())
-                && entity.getPassword().equals(dto.getPassword())) {
+        if(entity.getPassword().equals(dto.getPassword())) {
             repository.deleteById(entity.getId());
             response.setMessage("물품을 삭제했습니다.");
         } else {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+            throw new NotMatchedPasswordException();
         }
 
         return response;
     }
 
-
+    // 물품 이미지 업데이트
     public ResponseDto updateItemImage(Long id, MultipartFile image, String writer, String password) {
         Optional<SalesItemEntity> optionalEntity = repository.findById(id);
 
         if(optionalEntity.isEmpty())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            throw new ItemNotFoundException();
 
         SalesItemEntity entity = optionalEntity.get();
 
-        if(!(entity.getWriter().equals(writer) && entity.getPassword().equals(password)))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        if(!entity.getPassword().equals(password))
+            throw new NotMatchedPasswordException();
 
         String extension = "." + image.getOriginalFilename().split("\\.")[1];
         String imageDir = String.format("./item-images/%d", id);
@@ -130,7 +131,7 @@ public class SalesItemService {
             Files.createDirectories(Paths.get(imageDir));
         } catch (IOException e) {
             log.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ImageUpdateException();
         }
 
         File file = new File(Path.of(imageDir, itemImageName).toUri());
@@ -139,7 +140,7 @@ public class SalesItemService {
             outputStream.write(image.getBytes());
         } catch (IOException e) {
             log.error(e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new ImageUpdateException();
         }
 
         String imageUrl = String.format("/static/%d/%s", id, itemImageName);
