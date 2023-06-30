@@ -65,7 +65,7 @@ public class SalesItemController {
             value = "/{itemId}/image",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE
     )
-    public ResponseDto createItemImage(
+    public ResponseDto updateItemImage(
             @PathVariable("itemId") Long id,
             @RequestParam("image") MultipartFile image,
             @RequestParam("writer") String writer,
