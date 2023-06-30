@@ -7,7 +7,11 @@ import com.example.mini1.dto.SalesItemInDto;
 import com.example.mini1.dto.SalesItemPageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 
 @RestController
@@ -20,10 +24,7 @@ public class SalesItemController {
     public ResponseDto create(
             @RequestBody SalesItemInDto dto
             ) {
-        ResponseDto response = new ResponseDto();
-        service.createSalesItem(dto);
-        response.setMessage("등록이 완료되었습니다. ");
-        return response;
+        return service.createSalesItem(dto);
     }
 
     // 페이지 전체조회
@@ -36,11 +37,41 @@ public class SalesItemController {
     }
 
     // 단일 조회
-    @GetMapping("{id}")
-    public SalesItemOutDto read(@PathVariable("id") Long id) {
+    @GetMapping("{itemId}")
+    public SalesItemOutDto read(@PathVariable("itemId") Long id) {
         return service.readSalesItem(id);
     }
 
+    // 게시글 수정
+    @PutMapping("{itemId}")
+    public ResponseDto update(
+            @PathVariable("itemId") Long id,
+            @RequestBody SalesItemInDto dto
+    ) {
+        return service.updateSalesItem(id, dto);
+    }
 
+    // 게시글 삭제
+    @DeleteMapping("{itemId}")
+    public ResponseDto delete(
+            @PathVariable("itemId") Long id,
+            @RequestBody SalesItemInDto dto
+    ) {
+        return service.deleteSalesItem(id, dto);
+    }
+
+    // 이미지 등록
+    @PutMapping(
+            value = "/{itemId}/image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseDto createItemImage(
+            @PathVariable("itemId") Long id,
+            @RequestParam("image") MultipartFile image,
+            @RequestParam("writer") String writer,
+            @RequestParam("password") String password
+    ) {
+        return service.updateItemImage(id, image, writer, password);
+    }
 
 }
