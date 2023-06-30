@@ -1,6 +1,7 @@
 package com.example.mini1.service;
 
 import com.example.mini1.dto.SalesItemInDto;
+import com.example.mini1.dto.SalesItemOutDto;
 import com.example.mini1.dto.SalesItemPageDto;
 import com.example.mini1.entity.SalesItemEntity;
 import com.example.mini1.repository.SalesItemRepository;
@@ -43,4 +44,13 @@ public class SalesItemService {
         return salesItemDtoPage;
     }
 
+    // SalesItem 단일조회
+    public SalesItemOutDto readSalesItem(Long id) {
+        Optional<SalesItemEntity> optionalEntity = repository.findById(id);
+
+        if(optionalEntity.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+
+        return SalesItemOutDto.fromEntity(optionalEntity.get());
+    }
 }
