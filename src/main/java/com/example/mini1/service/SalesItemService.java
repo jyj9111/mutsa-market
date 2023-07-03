@@ -8,6 +8,7 @@ import com.example.mini1.entity.SalesItemEntity;
 import com.example.mini1.exception.ImageUpdateException;
 import com.example.mini1.exception.ItemNotFoundException;
 import com.example.mini1.exception.NotMatchedPasswordException;
+import com.example.mini1.exception.NotMatchedWriterException;
 import com.example.mini1.repository.SalesItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,6 +78,12 @@ public class SalesItemService {
             throw new ItemNotFoundException();
 
         SalesItemEntity entity = optionalEntity.get();
+
+        if(!dto.getWriter().equals(entity.getWriter()))
+            throw new NotMatchedWriterException();
+        if(!dto.getPassword().equals(entity.getPassword()))
+            throw new NotMatchedPasswordException();
+
         entity.setTitle(dto.getTitle());
         entity.setDescription(dto.getDescription());
         entity.setMinPriceWanted(dto.getMinPriceWanted());
@@ -96,15 +103,15 @@ public class SalesItemService {
         if(optionalEntity.isEmpty())
             throw new ItemNotFoundException();
 
-        ResponseDto response = new ResponseDto();
         SalesItemEntity entity = optionalEntity.get();
-
-        if(entity.getPassword().equals(dto.getPassword())) {
-            repository.deleteById(entity.getId());
-            response.setMessage("물품을 삭제했습니다.");
-        } else {
+        if(!dto.getWriter().equals(entity.getWriter()))
+            throw new NotMatchedWriterException();
+        if(!dto.getPassword().equals(entity.getPassword()))
             throw new NotMatchedPasswordException();
-        }
+
+        ResponseDto response = new ResponseDto();
+        repository.deleteById(entity.getId());
+        response.setMessage("물품을 삭제했습니다.");
 
         return response;
     }
@@ -118,6 +125,8 @@ public class SalesItemService {
 
         SalesItemEntity entity = optionalEntity.get();
 
+        if(!entity.getWriter().equals(writer))
+            throw new NotMatchedWriterException();
         if(!entity.getPassword().equals(password))
             throw new NotMatchedPasswordException();
 
