@@ -1,4 +1,4 @@
-package com.example.mini1.dto;
+package com.example.mini1.dto.item;
 
 import com.example.mini1.entity.SalesItemEntity;
 import lombok.Data;

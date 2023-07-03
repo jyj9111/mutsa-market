@@ -1,17 +1,15 @@
 package com.example.mini1.controller;
 
-import com.example.mini1.dto.SalesItemOutDto;
+import com.example.mini1.dto.item.SalesItemOutDto;
 import com.example.mini1.service.SalesItemService;
 import com.example.mini1.dto.ResponseDto;
-import com.example.mini1.dto.SalesItemInDto;
-import com.example.mini1.dto.SalesItemPageDto;
+import com.example.mini1.dto.item.SalesItemInDto;
+import com.example.mini1.dto.item.SalesItemPageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 
 @RestController

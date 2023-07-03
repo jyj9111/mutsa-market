@@ -1,20 +1,12 @@
 package com.example.mini1.controller;
 
 import com.example.mini1.dto.ResponseDto;
-import com.example.mini1.dto.SalesItemInDto;
-import com.example.mini1.dto.SalesItemOutDto;
-import com.example.mini1.dto.SalesItemPageDto;
 import com.example.mini1.exception.status.Status400Exception;
 import com.example.mini1.exception.status.Status404Exception;
 import com.example.mini1.exception.status.Status500Exception;
-import com.example.mini1.service.SalesItemService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 
 @RestControllerAdvice

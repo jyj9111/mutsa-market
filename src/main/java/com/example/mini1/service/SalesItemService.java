@@ -1,9 +1,9 @@
 package com.example.mini1.service;
 
 import com.example.mini1.dto.ResponseDto;
-import com.example.mini1.dto.SalesItemInDto;
-import com.example.mini1.dto.SalesItemOutDto;
-import com.example.mini1.dto.SalesItemPageDto;
+import com.example.mini1.dto.item.SalesItemInDto;
+import com.example.mini1.dto.item.SalesItemOutDto;
+import com.example.mini1.dto.item.SalesItemPageDto;
 import com.example.mini1.entity.SalesItemEntity;
 import com.example.mini1.exception.ImageUpdateException;
 import com.example.mini1.exception.ItemNotFoundException;
