@@ -49,4 +49,13 @@ public class CommentController {
         return service.updateReply(itemId, commentId, dto);
     }
 
+    // 댓글 삭제
+    @DeleteMapping("/{itemId}/comments/{commentId}")
+    public ResponseDto delete(
+            @PathVariable("itemId") Long itemId,
+            @PathVariable("commentId") Long commentId,
+            @RequestBody CommentInDto dto
+    ) {
+        return service.deleteComment(itemId, commentId, dto);
+    }
 }

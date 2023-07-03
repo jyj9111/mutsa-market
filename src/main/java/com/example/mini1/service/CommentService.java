@@ -99,5 +99,24 @@ public class CommentService {
     }
 
 
+    public ResponseDto deleteComment(Long itemId, Long commentId, CommentInDto dto) {
+        if(!salesItemRepository.existsById(itemId))
+            throw new ItemNotFoundException();
 
+        Optional<CommentEntity> optionalComment = commentRepository.findById(commentId);
+        if(optionalComment.isEmpty())
+            throw new CommentNotFoundException();
+
+        CommentEntity commentEntity = optionalComment.get();
+        if(!dto.getWriter().equals(commentEntity.getWriter()))
+            throw new NotMatchedWriterException();
+        if(!dto.getPassword().equals(commentEntity.getPassword()))
+            throw new NotMatchedPasswordException();
+
+        commentRepository.deleteById(commentId);
+
+        ResponseDto response = new ResponseDto();
+        response.setMessage("댓글을 삭제했습니다.");
+        return response;
+    }
 }
