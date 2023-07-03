@@ -28,4 +28,14 @@ public class CommentController {
     public Page<CommentPageDto> readAll(@PathVariable("itemId") Long itemId) {
         return service.readCommentPaged(itemId);
     }
+
+    // 댓글 수정
+    @PutMapping("/{itemId}/comments/{commentId}")
+    public ResponseDto update(
+            @PathVariable("itemId") Long itemId,
+            @PathVariable("commentId") Long commentId,
+            @RequestBody CommentInDto dto
+    ) {
+        return service.updateComment(itemId, commentId, dto);
+    }
 }

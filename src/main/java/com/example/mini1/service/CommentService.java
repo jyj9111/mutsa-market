@@ -4,6 +4,7 @@ import com.example.mini1.dto.ResponseDto;
 import com.example.mini1.dto.comments.CommentInDto;
 import com.example.mini1.dto.comments.CommentPageDto;
 import com.example.mini1.entity.CommentEntity;
+import com.example.mini1.exception.CommentNotFoundException;
 import com.example.mini1.exception.ItemNotFoundException;
 import com.example.mini1.repository.CommentRepository;
 import com.example.mini1.repository.SalesItemRepository;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -46,5 +49,24 @@ public class CommentService {
         Page<CommentEntity> commentEntityPage = commentRepository.findAllByItemId(itemId, pageable);
         Page<CommentPageDto> commentPageDto = commentEntityPage.map(CommentPageDto::fromEntity);
         return commentPageDto;
+    }
+
+    // 댓글 수정
+    public ResponseDto updateComment(Long itemId, Long commentId, CommentInDto dto) {
+        if(!salesItemRepository.existsById(itemId))
+            throw new ItemNotFoundException();
+
+        Optional<CommentEntity> optionalComment = commentRepository.findById(commentId);
+        if(optionalComment.isEmpty())
+            throw new CommentNotFoundException();
+        CommentEntity entity = optionalComment.get();
+        entity.setWriter(dto.getWriter());
+        entity.setPassword(dto.getPassword());
+        entity.setContent(dto.getContent());
+        commentRepository.save(entity);
+
+        ResponseDto response = new ResponseDto();
+        response.setMessage("댓글이 수정되었습니다.");
+        return response;
     }
 }
