@@ -54,7 +54,7 @@ public class SalesItemService {
     // SalesItem 전체조회(페이지)
     public Page<SalesItemPageDto> readSalesItemPaged(Integer page, Integer limit) {
         Pageable pageable = PageRequest.of(page, limit, Sort.by("id"));
-        Page<SalesItemEntity> salesItemEntityPage =repository.findAll(pageable);
+        Page<SalesItemEntity> salesItemEntityPage = repository.findAll(pageable);
         Page<SalesItemPageDto> salesItemDtoPage = salesItemEntityPage.map(SalesItemPageDto::fromEntity);
         return salesItemDtoPage;
     }
