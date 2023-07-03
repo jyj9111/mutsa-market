@@ -7,4 +7,5 @@ public class CommentInDto {
     private String writer;
     private String password;
     private String content;
+    private String reply;
 }

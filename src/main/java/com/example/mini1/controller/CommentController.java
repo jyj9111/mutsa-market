@@ -38,4 +38,15 @@ public class CommentController {
     ) {
         return service.updateComment(itemId, commentId, dto);
     }
+
+    // 댓글에 대한 답글 추가
+    @PutMapping("/{itemId}/comments/{commentId}/reply")
+    public ResponseDto updateReply(
+            @PathVariable("itemId") Long itemId,
+            @PathVariable("commentId") Long commentId,
+            @RequestBody CommentInDto dto
+    ) {
+        return service.updateReply(itemId, commentId, dto);
+    }
+
 }

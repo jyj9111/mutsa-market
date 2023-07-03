@@ -4,8 +4,11 @@ import com.example.mini1.dto.ResponseDto;
 import com.example.mini1.dto.comments.CommentInDto;
 import com.example.mini1.dto.comments.CommentPageDto;
 import com.example.mini1.entity.CommentEntity;
+import com.example.mini1.entity.SalesItemEntity;
 import com.example.mini1.exception.CommentNotFoundException;
 import com.example.mini1.exception.ItemNotFoundException;
+import com.example.mini1.exception.NotMatchedPasswordException;
+import com.example.mini1.exception.NotMatchedWriterException;
 import com.example.mini1.repository.CommentRepository;
 import com.example.mini1.repository.SalesItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -59,14 +62,42 @@ public class CommentService {
         Optional<CommentEntity> optionalComment = commentRepository.findById(commentId);
         if(optionalComment.isEmpty())
             throw new CommentNotFoundException();
-        CommentEntity entity = optionalComment.get();
-        entity.setWriter(dto.getWriter());
-        entity.setPassword(dto.getPassword());
-        entity.setContent(dto.getContent());
-        commentRepository.save(entity);
+        CommentEntity commentEntity = optionalComment.get();
+        commentEntity.setWriter(dto.getWriter());
+        commentEntity.setPassword(dto.getPassword());
+        commentEntity.setContent(dto.getContent());
+        commentRepository.save(commentEntity);
 
         ResponseDto response = new ResponseDto();
         response.setMessage("댓글이 수정되었습니다.");
         return response;
     }
+
+    // 댓글에 대한 답글 추가
+    public ResponseDto updateReply(Long itemId, Long commentId, CommentInDto dto) {
+        Optional<SalesItemEntity> optionalSalesItem = salesItemRepository.findById(itemId);
+        if(optionalSalesItem.isEmpty())
+            throw new ItemNotFoundException();
+
+        SalesItemEntity salesItemEntity = optionalSalesItem.get();
+        if(!dto.getWriter().equals(salesItemEntity.getWriter()))
+            throw new NotMatchedWriterException();
+        if(!dto.getPassword().equals(salesItemEntity.getPassword()))
+            throw new NotMatchedPasswordException();
+
+        Optional<CommentEntity> optionalComment = commentRepository.findById(commentId);
+        if(optionalComment.isEmpty())
+            throw new CommentNotFoundException();
+
+        CommentEntity commentEntity = optionalComment.get();
+        commentEntity.setReply(dto.getReply());
+        commentRepository.save(commentEntity);
+
+        ResponseDto response = new ResponseDto();
+        response.setMessage("댓글에 답글이 추가되었습니다.");
+        return response;
+    }
+
+
+
 }
