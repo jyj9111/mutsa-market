@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public class NegotiationInDto {
+public class NegoInDto {
     private String writer;
     private String password;
     private Long suggestedPrice;

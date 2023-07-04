@@ -2,7 +2,7 @@ package com.example.mini1.controller;
 
 import com.example.mini1.dto.ResponseDto;
 import com.example.mini1.dto.nego.NegoPageDto;
-import com.example.mini1.dto.nego.NegotiationInDto;
+import com.example.mini1.dto.nego.NegoInDto;
 import com.example.mini1.service.NegotiationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,7 +18,7 @@ public class NegotiationController {
     @PostMapping("/proposals")
     public ResponseDto create(
             @PathVariable("itemId") Long itemId,
-            @RequestBody NegotiationInDto dto
+            @RequestBody NegoInDto dto
     ) {
         return service.createProposal(itemId, dto);
     }
@@ -34,4 +34,23 @@ public class NegotiationController {
         return service.readAllProposal(itemId, writer, password, page);
     }
 
+    // 제안 수정
+    @PutMapping("/proposals/{proposalId}")
+    public ResponseDto update(
+            @PathVariable("itemId") Long itemId,
+            @PathVariable("proposalId") Long propId,
+            @RequestBody NegoInDto dto
+    ) {
+        return service.updateProposal(itemId, propId, dto);
+    }
+
+    // 제안 삭제
+    @DeleteMapping("/proposals/{proposalId}")
+    public ResponseDto delete(
+            @PathVariable("itemId") Long itemId,
+            @PathVariable("proposalId") Long propId,
+            @RequestBody NegoInDto dto
+    ) {
+        return service.deleteProposal(itemId, propId, dto);
+    }
 }

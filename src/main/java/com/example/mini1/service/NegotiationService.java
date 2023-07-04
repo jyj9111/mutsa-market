@@ -2,10 +2,13 @@ package com.example.mini1.service;
 
 import com.example.mini1.dto.ResponseDto;
 import com.example.mini1.dto.nego.NegoPageDto;
-import com.example.mini1.dto.nego.NegotiationInDto;
+import com.example.mini1.dto.nego.NegoInDto;
 import com.example.mini1.entity.NegotiationEntity;
 import com.example.mini1.entity.SalesItemEntity;
 import com.example.mini1.exception.ItemNotFoundException;
+import com.example.mini1.exception.NotMatchedPasswordException;
+import com.example.mini1.exception.NotMatchedWriterException;
+import com.example.mini1.exception.ProposalNotFoundException;
 import com.example.mini1.repository.NegotiationRepository;
 import com.example.mini1.repository.SalesItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +26,8 @@ public class NegotiationService {
     private final SalesItemRepository salesItemRepository;
     private final NegotiationRepository negoRepository;
 
-    public ResponseDto createProposal(Long itemId, NegotiationInDto dto) {
+    // 제안 등록
+    public ResponseDto createProposal(Long itemId, NegoInDto dto) {
         if(!salesItemRepository.existsById(itemId))
             throw new ItemNotFoundException();
 
@@ -40,6 +44,7 @@ public class NegotiationService {
         return response;
     }
 
+    // 제안 조회
     public Page<NegoPageDto> readAllProposal(Long itemId, String writer, String password, Integer page) {
         Optional<SalesItemEntity> optionalSalesItem = salesItemRepository.findById(itemId);
         if(optionalSalesItem.isEmpty())
@@ -58,5 +63,52 @@ public class NegotiationService {
 
         Page<NegoPageDto> negoDtoPage = negoEntityPage.map(NegoPageDto::fromEntity);
         return negoDtoPage;
+    }
+
+    // 제안 수정
+    public ResponseDto updateProposal(Long itemId, Long propId, NegoInDto dto) {
+        if(!salesItemRepository.existsById(itemId))
+            throw new ItemNotFoundException();
+
+        Optional<NegotiationEntity> optionalNegoEntity = negoRepository.findById(propId);
+        if(optionalNegoEntity.isEmpty())
+            throw new ProposalNotFoundException();
+
+        NegotiationEntity negoEntity = optionalNegoEntity.get();
+
+        if(!negoEntity.getWriter().equals(dto.getWriter()))
+            throw new NotMatchedWriterException();
+        if(!negoEntity.getPassword().equals(dto.getPassword()))
+            throw new NotMatchedPasswordException();
+
+        negoEntity.setSuggestedPrice(dto.getSuggestedPrice());
+        negoRepository.save(negoEntity);
+
+        ResponseDto response = new ResponseDto();
+        response.setMessage("제안이 수정되었습니다.");
+        return response;
+    }
+
+    // 제안 삭제
+    public ResponseDto deleteProposal(Long itemId, Long propId, NegoInDto dto) {
+        if(!salesItemRepository.existsById(itemId))
+            throw new ItemNotFoundException();
+
+        Optional<NegotiationEntity> optionalNegoEntity = negoRepository.findById(propId);
+        if(optionalNegoEntity.isEmpty())
+            throw new ProposalNotFoundException();
+
+        NegotiationEntity negoEntity = optionalNegoEntity.get();
+
+        if(!negoEntity.getWriter().equals(dto.getWriter()))
+            throw new NotMatchedWriterException();
+        if(!negoEntity.getPassword().equals(dto.getPassword()))
+            throw new NotMatchedPasswordException();
+
+        negoRepository.deleteById(propId);
+
+        ResponseDto response = new ResponseDto();
+        response.setMessage("제안을 삭제했습니다.");
+        return response;
     }
 }
