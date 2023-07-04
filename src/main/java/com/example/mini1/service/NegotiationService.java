@@ -5,10 +5,7 @@ import com.example.mini1.dto.nego.NegoPageDto;
 import com.example.mini1.dto.nego.NegoInDto;
 import com.example.mini1.entity.NegotiationEntity;
 import com.example.mini1.entity.SalesItemEntity;
-import com.example.mini1.exception.ItemNotFoundException;
-import com.example.mini1.exception.NotMatchedPasswordException;
-import com.example.mini1.exception.NotMatchedWriterException;
-import com.example.mini1.exception.ProposalNotFoundException;
+import com.example.mini1.exception.*;
 import com.example.mini1.repository.NegotiationRepository;
 import com.example.mini1.repository.SalesItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -109,6 +107,70 @@ public class NegotiationService {
 
         ResponseDto response = new ResponseDto();
         response.setMessage("제안을 삭제했습니다.");
+        return response;
+    }
+
+    // 제안 수락 or 거절 결정
+    public ResponseDto updateProposalStatus(Long itemId, Long propId, NegoInDto dto) {
+        Optional<SalesItemEntity> optionalItemEntity = salesItemRepository.findById(itemId);
+        if(optionalItemEntity.isEmpty())
+            throw new ItemNotFoundException();
+
+        SalesItemEntity itemEntity = optionalItemEntity.get();
+        if(!itemEntity.getWriter().equals(dto.getWriter()))
+            throw new NotMatchedWriterException();
+        if(!itemEntity.getPassword().equals(dto.getPassword()))
+            throw new NotMatchedPasswordException();
+
+        Optional<NegotiationEntity> optionalNegoEntity = negoRepository.findById(propId);
+        if(optionalNegoEntity.isEmpty())
+            throw new ProposalNotFoundException();
+
+        NegotiationEntity negoEntity = optionalNegoEntity.get();
+        negoEntity.setStatus(dto.getStatus());
+        negoRepository.save(negoEntity);
+
+        ResponseDto response = new ResponseDto();
+        response.setMessage("제안의 상태가 변경되었습니다.");
+        return response;
+    }
+
+    // 구매 확정
+    public ResponseDto updateItemAndProposalStatus(Long itemId, Long propId, NegoInDto dto) {
+        Optional<SalesItemEntity> optionalItemEntity = salesItemRepository.findById(itemId);
+        if(optionalItemEntity.isEmpty())
+            throw new ItemNotFoundException();
+        SalesItemEntity itemEntity = optionalItemEntity.get();
+
+        Optional<NegotiationEntity> optionalNegoEntity = negoRepository.findById(propId);
+        if(optionalNegoEntity.isEmpty())
+            throw new ProposalNotFoundException();
+
+        NegotiationEntity negoEntity = optionalNegoEntity.get();
+        if(!negoEntity.getWriter().equals(dto.getWriter()))
+            throw new NotMatchedWriterException();
+        if(!negoEntity.getPassword().equals(dto.getPassword()))
+            throw new NotMatchedPasswordException();
+        if(!negoEntity.getStatus().equals("수락"))
+            throw new WrongStatusException();
+
+        negoEntity.setStatus(dto.getStatus());
+        negoEntity = negoRepository.save(negoEntity);
+
+        if(negoEntity.getStatus().equals("확정")) {
+            itemEntity.setStatus("판매완료");
+            salesItemRepository.save(itemEntity);
+        }
+
+        List<NegotiationEntity> negoList = negoRepository.findAllByItemId(itemId);
+        for(NegotiationEntity entity : negoList) {
+            if(entity.getId().equals(negoEntity.getId())) continue;
+            entity.setStatus("거절");
+            negoRepository.save(entity);
+        }
+
+        ResponseDto response = new ResponseDto();
+        response.setMessage("구매가 확정되었습니다.");
         return response;
     }
 }

@@ -9,4 +9,5 @@ public class NegoInDto {
     private String writer;
     private String password;
     private Long suggestedPrice;
+    private String status;
 }

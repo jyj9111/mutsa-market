@@ -35,13 +35,33 @@ public class NegotiationController {
     }
 
     // 제안 수정
-    @PutMapping("/proposals/{proposalId}")
+    @PutMapping(value = "/proposals/{proposalId}", headers = "mode=buyer")
     public ResponseDto update(
             @PathVariable("itemId") Long itemId,
             @PathVariable("proposalId") Long propId,
             @RequestBody NegoInDto dto
     ) {
         return service.updateProposal(itemId, propId, dto);
+    }
+
+    // 제안 수락 Or 거절
+    @PutMapping(value = "/proposals/{proposalId}", headers = "mode=seller")
+    public ResponseDto updateStatus(
+            @PathVariable("itemId") Long itemId,
+            @PathVariable("proposalId") Long propId,
+            @RequestBody NegoInDto dto
+    ) {
+        return service.updateProposalStatus(itemId, propId, dto);
+    }
+
+    // 구매 확정
+    @PutMapping(value = "/proposals/{proposalId}", headers = "mode=end")
+    public ResponseDto updateConfirm(
+            @PathVariable("itemId") Long itemId,
+            @PathVariable("proposalId") Long propId,
+            @RequestBody NegoInDto dto
+    ) {
+        return service.updateItemAndProposalStatus(itemId, propId, dto);
     }
 
     // 제안 삭제
