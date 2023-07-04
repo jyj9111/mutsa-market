@@ -16,6 +16,7 @@ public class SalesItemInDto {
     private Long minPriceWanted;
     @NotNull
     private String writer;
+    @NotNull
     private String password;
 
 }
