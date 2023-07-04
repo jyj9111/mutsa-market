@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/items")
+@RequestMapping("/items/{itemId}")
 public class CommentController {
     private final CommentService service;
 
     // 댓글 등록
-    @PostMapping("/{itemId}/comments")
+    @PostMapping("/comments")
     public ResponseDto create(
             @PathVariable("itemId") Long itemId,
             @RequestBody CommentInDto dto
@@ -24,13 +24,15 @@ public class CommentController {
     }
 
     // 댓글 조회 페이지
-    @GetMapping("/{itemId}/comments")
-    public Page<CommentPageDto> readAll(@PathVariable("itemId") Long itemId) {
-        return service.readCommentPaged(itemId);
+    @GetMapping("/comments")
+    public Page<CommentPageDto> readAll(
+            @PathVariable("itemId") Long itemId,
+            @RequestHeader("page") Integer page) {
+        return service.readCommentPaged(itemId, page);
     }
 
     // 댓글 수정
-    @PutMapping("/{itemId}/comments/{commentId}")
+    @PutMapping("/comments/{commentId}")
     public ResponseDto update(
             @PathVariable("itemId") Long itemId,
             @PathVariable("commentId") Long commentId,
@@ -40,7 +42,7 @@ public class CommentController {
     }
 
     // 댓글에 대한 답글 추가
-    @PutMapping("/{itemId}/comments/{commentId}/reply")
+    @PutMapping("/comments/{commentId}/reply")
     public ResponseDto updateReply(
             @PathVariable("itemId") Long itemId,
             @PathVariable("commentId") Long commentId,
@@ -50,7 +52,7 @@ public class CommentController {
     }
 
     // 댓글 삭제
-    @DeleteMapping("/{itemId}/comments/{commentId}")
+    @DeleteMapping("/comments/{commentId}")
     public ResponseDto delete(
             @PathVariable("itemId") Long itemId,
             @PathVariable("commentId") Long commentId,

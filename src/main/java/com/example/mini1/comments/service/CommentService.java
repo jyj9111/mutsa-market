@@ -44,11 +44,11 @@ public class CommentService {
     }
 
     // 페이지 단위 해당 하이템 댓글 조회
-    public Page<CommentPageDto> readCommentPaged(Long itemId) {
+    public Page<CommentPageDto> readCommentPaged(Long itemId, Integer page) {
         if(!salesItemRepository.existsById(itemId))
             throw new ItemNotFoundException();
 
-        Pageable pageable = PageRequest.of(0, 25, Sort.by("id"));
+        Pageable pageable = PageRequest.of(page, 25, Sort.by("id"));
         Page<CommentEntity> commentEntityPage = commentRepository.findAllByItemId(itemId, pageable);
         Page<CommentPageDto> commentPageDto = commentEntityPage.map(CommentPageDto::fromEntity);
         return commentPageDto;
@@ -98,7 +98,7 @@ public class CommentService {
         return response;
     }
 
-
+    // 댓글 삭제
     public ResponseDto deleteComment(Long itemId, Long commentId, CommentInDto dto) {
         if(!salesItemRepository.existsById(itemId))
             throw new ItemNotFoundException();
