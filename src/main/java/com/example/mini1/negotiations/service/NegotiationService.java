@@ -1,10 +1,8 @@
 package com.example.mini1.negotiations.service;
 
 import com.example.mini1.common.dto.ResponseDto;
-import com.example.mini1.common.dto.exception.*;
 import com.example.mini1.common.exception.*;
 import com.example.mini1.items.entity.SalesItemEntity;
-import com.example.mini1.exception.*;
 import com.example.mini1.items.repository.SalesItemRepository;
 import com.example.mini1.negotiations.dto.NegoInDto;
 import com.example.mini1.negotiations.dto.NegoPageDto;
