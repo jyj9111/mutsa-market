@@ -11,9 +11,17 @@ public class NegotiationEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private Long itemId;
+
+    @Column(nullable = false)
     private Long suggestedPrice;
+
     private String status;
+
+    @Column(nullable = false)
     private String writer;
+
+    @Column(nullable = false)
     private String password;
 }

@@ -11,11 +11,22 @@ public class SalesItemEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String description;
+
     private String imageUrl;
+
+    @Column(nullable = false)
     private Long minPriceWanted;
+
     private String status;
+
+    @Column(nullable = false)
     private String writer;
+
+    @Column(nullable = false)
     private String password;
 }
