@@ -11,7 +11,7 @@ public class CommentPageDto {
 
     public static CommentPageDto fromEntity(CommentEntity entity) {
         CommentPageDto dto = new CommentPageDto();
-        dto.setId(entity.getItemId());
+        dto.setId(entity.getId());
         dto.setContent(entity.getContent());
         dto.setReply(entity.getReply());
         return dto;
