@@ -1,4 +1,4 @@
-package com.example.mini1.common.exception;
+package com.example.mini1.common.exception.etc;
 
 import com.example.mini1.common.exception.status.Status500Exception;
 
