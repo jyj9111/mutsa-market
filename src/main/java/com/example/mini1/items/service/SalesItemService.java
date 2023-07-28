@@ -1,8 +1,8 @@
 package com.example.mini1.items.service;
 
 import com.example.mini1.common.dto.ResponseDto;
-import com.example.mini1.common.exception.ImageUpdateException;
-import com.example.mini1.common.exception.ItemNotFoundException;
+import com.example.mini1.common.exception.etc.ImageUpdateException;
+import com.example.mini1.common.exception.items.ItemNotFoundException;
 import com.example.mini1.common.exception.NotMatchedPasswordException;
 import com.example.mini1.common.exception.NotMatchedWriterException;
 import com.example.mini1.items.dto.SalesItemInDto;
