@@ -1,4 +1,4 @@
-package com.example.mini1.security.entity;
+package com.example.mini1.users.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -18,5 +18,5 @@ public class UserEntity {
 
     private String email;
     private String phone;
-    private String City;
+    private String city;
 }
