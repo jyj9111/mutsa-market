@@ -1,5 +1,6 @@
 package com.example.mini1.security.config;
 
+import com.example.mini1.security.jwt.JwtTokenFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,9 +9,16 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.AuthorizationFilter;
 
 @Configuration
 public class WebSecurityConfig {
+    private final JwtTokenFilter jwtTokenFilter;
+
+    public WebSecurityConfig(JwtTokenFilter jwtTokenFilter) {
+        this.jwtTokenFilter = jwtTokenFilter;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http
@@ -19,7 +27,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         authHttp -> authHttp.
                         requestMatchers(
-                                "/users/my-profile"
+                                "/items/**"
                         ).authenticated() // 인증된 사용자만
                         .requestMatchers(
                                 "/users/login",
@@ -31,7 +39,8 @@ public class WebSecurityConfig {
                 .sessionManagement(
                         sessionManagement -> sessionManagement
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+                )
+                .addFilterBefore(jwtTokenFilter, AuthorizationFilter.class);
 
         return http.build();
     }

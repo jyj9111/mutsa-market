@@ -22,3 +22,6 @@ spring:
   web:
     resources:
       static-locations: file:item-images/,classpath:/static
+
+jwt:
+  secret: vmfhwprxmrkdjfuqrnaksdjfudnjdndkdkdkddmdkdkdkdkdfwxcfzxfsafwe
