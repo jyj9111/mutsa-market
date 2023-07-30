@@ -3,20 +3,26 @@ package com.example.mini1.comments.service;
 import com.example.mini1.comments.dto.CommentInDto;
 import com.example.mini1.comments.dto.CommentPageDto;
 import com.example.mini1.comments.entity.CommentEntity;
+import com.example.mini1.comments.exception.UnAuthCommentDeleteException;
+import com.example.mini1.comments.exception.UnAuthCommentEditException;
+import com.example.mini1.comments.exception.UnAuthCommentReplyException;
 import com.example.mini1.comments.repository.CommentRepository;
 import com.example.mini1.common.dto.ResponseDto;
+import com.example.mini1.common.exception.user.NotExistUsernameException;
 import com.example.mini1.items.entity.SalesItemEntity;
-import com.example.mini1.common.exception.comments.CommentNotFoundException;
-import com.example.mini1.common.exception.items.ItemNotFoundException;
-import com.example.mini1.common.exception.NotMatchedPasswordException;
-import com.example.mini1.common.exception.NotMatchedWriterException;
+import com.example.mini1.comments.exception.CommentNotFoundException;
+import com.example.mini1.items.exception.ItemNotFoundException;
 import com.example.mini1.items.repository.SalesItemRepository;
+import com.example.mini1.users.entity.UserEntity;
+import com.example.mini1.users.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 import java.util.Optional;
 
@@ -25,17 +31,21 @@ import java.util.Optional;
 public class CommentService {
     private final CommentRepository commentRepository;
     private final SalesItemRepository salesItemRepository;
+    private final UserRepository userRepository;
 
     // 댓글 등록
-    public ResponseDto createComment(Long itemId, CommentInDto dto) {
-        if(!salesItemRepository.existsById(itemId))
-            throw new ItemNotFoundException();
+    public ResponseDto createComment(String username, Long itemId, CommentInDto dto) {
+        Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isEmpty())
+            throw new NotExistUsernameException();
+        UserEntity user = optionalUser.get();
 
-        CommentEntity newEntity = new CommentEntity();
-        newEntity.setItemId(itemId);
-        newEntity.setWriter(dto.getWriter());
-        newEntity.setPassword(dto.getPassword());
-        newEntity.setContent(dto.getContent());
+        Optional<SalesItemEntity> optionalItem = salesItemRepository.findById(itemId);
+        if (optionalItem.isEmpty())
+            throw new ItemNotFoundException();
+        SalesItemEntity item = optionalItem.get();
+
+        CommentEntity newEntity = CommentEntity.ofUserItemDto(user, item, dto);
         commentRepository.save(newEntity);
 
         ResponseDto response = new ResponseDto();
@@ -55,7 +65,8 @@ public class CommentService {
     }
 
     // 댓글 수정
-    public ResponseDto updateComment(Long itemId, Long commentId, CommentInDto dto) {
+    public ResponseDto updateComment(String username, Long itemId, Long commentId, CommentInDto dto) {
+
         if(!salesItemRepository.existsById(itemId))
             throw new ItemNotFoundException();
 
@@ -63,9 +74,11 @@ public class CommentService {
         if(optionalComment.isEmpty())
             throw new CommentNotFoundException();
         CommentEntity commentEntity = optionalComment.get();
-        commentEntity.setWriter(dto.getWriter());
-        commentEntity.setPassword(dto.getPassword());
-        commentEntity.setContent(dto.getContent());
+
+        if (!commentEntity.getUser().getUsername().equals(username))
+            throw new UnAuthCommentEditException();
+
+        commentEntity.updateComment(dto);
         commentRepository.save(commentEntity);
 
         ResponseDto response = new ResponseDto();
@@ -74,23 +87,21 @@ public class CommentService {
     }
 
     // 댓글에 대한 답글 추가
-    public ResponseDto updateReply(Long itemId, Long commentId, CommentInDto dto) {
+    public ResponseDto updateReply(String username, Long itemId, Long commentId, CommentInDto dto) {
         Optional<SalesItemEntity> optionalSalesItem = salesItemRepository.findById(itemId);
         if(optionalSalesItem.isEmpty())
             throw new ItemNotFoundException();
 
-        SalesItemEntity salesItemEntity = optionalSalesItem.get();
-        if(!dto.getWriter().equals(salesItemEntity.getWriter()))
-            throw new NotMatchedWriterException();
-        if(!dto.getPassword().equals(salesItemEntity.getPassword()))
-            throw new NotMatchedPasswordException();
+        SalesItemEntity itemEntity = optionalSalesItem.get();
+        if (!itemEntity.getUser().getUsername().equals(username))
+            throw new UnAuthCommentReplyException();
 
         Optional<CommentEntity> optionalComment = commentRepository.findById(commentId);
         if(optionalComment.isEmpty())
             throw new CommentNotFoundException();
 
         CommentEntity commentEntity = optionalComment.get();
-        commentEntity.setReply(dto.getReply());
+        commentEntity.setReply(dto);
         commentRepository.save(commentEntity);
 
         ResponseDto response = new ResponseDto();
@@ -99,7 +110,7 @@ public class CommentService {
     }
 
     // 댓글 삭제
-    public ResponseDto deleteComment(Long itemId, Long commentId, CommentInDto dto) {
+    public ResponseDto deleteComment(String username, Long itemId, Long commentId) {
         if(!salesItemRepository.existsById(itemId))
             throw new ItemNotFoundException();
 
@@ -108,10 +119,8 @@ public class CommentService {
             throw new CommentNotFoundException();
 
         CommentEntity commentEntity = optionalComment.get();
-        if(!dto.getWriter().equals(commentEntity.getWriter()))
-            throw new NotMatchedWriterException();
-        if(!dto.getPassword().equals(commentEntity.getPassword()))
-            throw new NotMatchedPasswordException();
+        if (!commentEntity.getUser().getUsername().equals(username))
+            throw new UnAuthCommentDeleteException();
 
         commentRepository.deleteById(commentId);
 
