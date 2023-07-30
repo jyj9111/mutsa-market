@@ -8,7 +8,8 @@ import com.example.mini1.items.dto.SalesItemInDto;
 import com.example.mini1.items.dto.SalesItemOutDto;
 import com.example.mini1.items.dto.SalesItemPageDto;
 import com.example.mini1.items.entity.SalesItemEntity;
-import com.example.mini1.items.exception.UnAuthItemUserException;
+import com.example.mini1.items.exception.UnAuthItemDeleteException;
+import com.example.mini1.items.exception.UnAuthItemEditException;
 import com.example.mini1.items.repository.SalesItemRepository;
 import com.example.mini1.users.entity.UserEntity;
 import com.example.mini1.users.repo.UserRepository;
@@ -81,7 +82,7 @@ public class SalesItemService {
 
         SalesItemEntity itemEntity = optionalEntity.get();
         if (!itemEntity.getUser().getUsername().equals(username)) {
-            throw new UnAuthItemUserException();
+            throw new UnAuthItemEditException();
         }
 
         itemEntity.updateItem(dto);
@@ -101,7 +102,7 @@ public class SalesItemService {
 
         SalesItemEntity itemEntity = optionalEntity.get();
         if (!itemEntity.getUser().getUsername().equals(username)) {
-            throw new UnAuthItemUserException();
+            throw new UnAuthItemDeleteException();
         }
 
         ResponseDto response = new ResponseDto();
@@ -120,7 +121,7 @@ public class SalesItemService {
 
         SalesItemEntity itemEntity = optionalEntity.get();
         if (!itemEntity.getUser().getUsername().equals(username)) {
-            throw new UnAuthItemUserException();
+            throw new UnAuthItemEditException();
         }
 
         String extension = "." + image.getOriginalFilename().split("\\.")[1];
