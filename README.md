@@ -1,6 +1,6 @@
 # ♻️ 멋사마켓 - _중고 거래 플랫폼_
 
-##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_from:&nbsp; . / 멋쟁이 사자처럼 / 백엔드 스쿨 / 5th / 미니 프로젝트 1_
+##### &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;_from:&nbsp; . / 멋쟁이 사자처럼 / 백엔드 스쿨 / 5th / 미션형 프로젝트_1
 
 ## 1️⃣ 프로젝트 소개
 - **♻️ 멋사마켓**은 많은 사람들이 사용 중인 **🥕당근마켓, 🧱중고나라** 에 착안하여 자신만의 중고거래 플랫폼을 만드는 미니 프로젝트 입니다.  
@@ -13,6 +13,7 @@
 - `IDE : IntelliJ IDEA`
 - `DataBase : SQLite`
   - `ORM (Object Relational Mapping) : JPA (Java Persistent API)`
+- `Security : Spring Security`
 </br>
 
 ### 📄 참고 ERD
@@ -24,12 +25,30 @@
 ## 2️⃣ 구현 기능
 
 <details>
+<summary>
+    
+  ### 1. Endpoint 정리
+</summary>
+============================================================================================
+<details>
   <summary>
     
-  ### 1. 간략 구성도
+  #### a. 회원가입(Register Member)
   </summary>
+<div markdown="1">
 
-### Sales_Item
+_회원 가입 진행_
+| 요청 | Method | Mapping URL |
+|:-- | :--: | :-- |
+| 회원 가입 | POST | /users/register |
+  
+</div>
+</details>
+<details>
+  <summary>
+    
+  #### x. 상품(Sales_Item)
+  </summary>
 <div markdown="1">
 
 _중고 거래할 물품을 (판매자) 등록, 수정, 이미지 등록, 삭제 (모두) 전체 조회, 단일 조회_
@@ -41,10 +60,14 @@ _중고 거래할 물품을 (판매자) 등록, 수정, 이미지 등록, 삭제
 | 물품 삭제 | DELETE | /items/{itemId} |
 | 물품 전체 조회 | GET | /items?page={페이지 번호}&limit={물품 갯수} |
 | 물품 단일 조회 | GET | /items/{itemsId} |
-
+  
 </div>
-
-### Comments
+</details>
+<details>
+  <summary>
+    
+  #### x. 댓글(Comments)
+  </summary>
 <div markdown="1">
 
 _해당 물품에 대한 댓글을 (구매자) 등록, 수정, 삭제 (판매자) 답글 등록, (모두) 댓글 전체 조회_
@@ -55,10 +78,14 @@ _해당 물품에 대한 댓글을 (구매자) 등록, 수정, 삭제 (판매자
 | 댓글 삭제 |  DELETE | /items/{itemId}/comments/{commentId} |
 | 답글 등록 | PUT | /items/{itemId}/comments/{commentId}/reply |
 | 댓글 전체 조회 | GET | /items/{itemId}/comments} |
-
+  
 </div>
-
-### Negotiation
+</details>
+<details>
+  <summary>
+    
+  #### x. 구매제안(Negotiation)
+  </summary>
 <div markdown="1">
 
 _해당 물품에 대한 구매제안을 (구매자) 등록, 수정, 삭제, 구매 확정 (판매자) 수락 or 거절 (모두) 조회_
@@ -70,19 +97,217 @@ _해당 물품에 대한 구매제안을 (구매자) 등록, 수정, 삭제, 구
 | 구매 확정 | PUT | /items/{itemId}/proposals/{proposalId} |
 | 제안 수락or거절 | PUT | /items/{itemId}/proposals/{proposalId} |
 | 제안 조회 | GET | /items/{itemId}/proposals/{proposalId}?writer={작성자}&password={비밀번호}&page={페이지 번호}|
-
+  
 </div>
+</details>
+============================================================================================
 </details>
 
 <details>
   <summary>
 
-  ### 2. 상세 설명
+  ### 2. 상세 API 명세
   </summary>
+  ============================================================================================
   <details>
   <summary>
     
-  #### Sales_Item
+  #### a. 회원가입(Register Member)
+  </summary>
+
+  <details>
+    <summary> 회원가입 - 성공 </summary>
+<div markdown="1">
+
+- 요청<br/>
+  - `POST /users/register`
+  - Header :
+    ```javascript
+    // 추가요소 없음
+    ```
+  - Body :
+  ```json
+  {
+    "username" : "gaga",
+    "password" : "1234",
+    "passwordCheck" : "1234",
+    "email" : "gaga@gmail.com",
+    "phone" : "010-1588-1588",
+    "city" : "Suwon"
+  }
+  ```
+- 응답<br/>
+  - Status : 200
+  - Body :
+  ```json
+  {
+    "message": "회원가입이 완료되었습니다."
+  }
+  ```
+
+</div>
+  </details>
+  <details>
+    <summary> 회원가입 - 비밀번호 불일치 </summary>
+<div markdown="1">
+
+- 요청<br/>
+  - `POST /users/register`
+  - Header :
+    ```javascript
+    // 추가요소 없음
+    ```
+  - Body :
+  ```json
+  {
+    "username" : "gaga",
+    "password" : "1234",
+    "passwordCheck" : "5678",
+    "email" : "gaga@gmail.com",
+    "phone" : "010-1588-1588",
+    "city" : "Suwon"
+  }
+  ```
+- 응답<br/>
+  - Status : 400
+  - Body :
+  ```json
+  {
+    "message": "비밀번호가 일치하지 않습니다."
+  }
+  ```
+
+</div>
+  </details>
+  <details>
+    <summary> 회원가입 - 이미 존재하는 이름 </summary>
+<div markdown="1">
+
+- 요청<br/>
+  - `POST /users/register`
+  - Header :
+    ```javascript
+    // 추가요소 없음
+    ```
+  - Body :
+  ```json
+  {
+    "username" : "gaga",
+    "password" : "1234",
+    "passwordCheck" : "1234",
+    "email" : "gaga@gmail.com",
+    "phone" : "010-1588-1588",
+    "city" : "Suwon"
+  }
+  ```
+- 응답<br/>
+  - Status : 400
+  - Body :
+  ```json
+  {
+    "message": "이미 존재하는 이름 입니다."
+  }
+  ```
+
+</div>
+  </details>
+</details>
+<details>
+  <summary>
+    
+  #### b. 로그인(Login)
+  </summary>
+
+  <details>
+    <summary> 로그인 - 성공(jwt 토큰 발급) </summary>
+<div markdown="1">
+
+- 요청<br/>
+  - `POST /users/login`
+  - Header :
+    ```javascript
+    // 추가요소 없음
+    ```
+  - Body :
+  ```json
+  {
+    "username" : "gaga",
+    "password" : "1234"
+  }
+  ```
+- 응답<br/>
+  - Status : 200
+  - Body :
+  ```json
+  {
+    "token": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnYWdhIiwia.BfM5nLtLs3aFPNL8Amy-IJhUBG6G1tOwn6vAhUjMdE-"
+  }
+  ```
+
+</div>
+  </details>
+  <details>
+    <summary> 로그인 - 비밀번호 불일치 </summary>
+<div markdown="1">
+
+- 요청<br/>
+  - `POST /users/login`
+  - Header :
+    ```javascript
+    // 추가요소 없음
+    ```
+  - Body :
+  ```json
+  {
+    "username" : "gaga",
+    "password" : "5678"
+  }
+  ```
+- 응답<br/>
+  - Status : 400
+  - Body :
+  ```json
+  {
+    "message": "비밀번호가 일치하지 않습니다."
+  }
+  ```
+
+</div>
+  </details>
+  <details>
+    <summary> 로그인 - 존재하지 않는 유저 </summary>
+<div markdown="1">
+
+- 요청<br/>
+  - `POST /users/login`
+  - Header :
+    ```javascript
+    // 추가요소 없음
+    ```
+  - Body :
+  ```json
+  {
+    "username" : "nana",
+    "password" : "1234"
+  }
+  ```
+- 응답<br/>
+  - Status : 400
+  - Body :
+  ```json
+  {
+    "message": "등록되지 않은 사용자 입니다."
+  }  
+  ```
+
+</div>
+  </details>
+</details>
+
+<details>
+  <summary>
+    
+  #### a. 상품(Sales_Item)
   </summary>
   <details>
     <summary>물품 등록</summary>
@@ -266,7 +491,7 @@ _해당 물품에 대한 구매제안을 (구매자) 등록, 수정, 삭제, 구
 <details>
   <summary>
     
-  #### Comments
+  #### b. 댓글(Comments)
   </summary>
   <details>
     <summary>댓글 등록</summary>
@@ -438,7 +663,7 @@ _해당 물품에 대한 구매제안을 (구매자) 등록, 수정, 삭제, 구
 <details>
   <summary>
 
-  #### Negotiation
+  #### c. 구매제안(Negotiation)
   </summary>
   <details>
     <summary>제안 등록</summary>
@@ -682,6 +907,7 @@ _해당 물품에 대한 구매제안을 (구매자) 등록, 수정, 삭제, 구
 </div>
   </details>
 </details>
+============================================================================================
 </details>
 
 
@@ -690,38 +916,53 @@ _해당 물품에 대한 구매제안을 (구매자) 등록, 수정, 삭제, 구
     
   ### 3. 예외 처리
   </summary>
+============================================================================================
+  <details>
+  <summary>
+    
+  #### Status - 400
+  </summary>
+<div markdown="1">
 
-  ### Status 400
-  <div markdown="1">
-  
   | 예외 클래스명 | 발생 상황 | Staus Code | 에러 메세지 |
   | :--: | :--: | :--: | :--: |
+  | ExistUsernameException() | 회원가입시 이미 존재하는 이름을 등록하려고 할 시 발생 | 400 - Bad Request| "이미 존재하는 이름 입니다." |
+  | NotExistUsernameException() | 등록되지 않은 아이디로 로그인 시도할 시 발생 | 400 - Bad Request| "등록되지 않은 사용자 입니다." |
   | NotMatchedWriterException() | 요청 "writer"값 불일치 시 발생 | 400 - Bad Request| "작성자가 일치하지 않습니다." |
   | NotMatchedPasswordException() | 요청 "password"값 불일치 시 발생 | 400 - Bad Request| "비밀번호가 일치하지 않습니다." |
   | WrongStatusException() | 제안의 상태가 "수락"이 아닌데 '구매 확정' 요청이 들어왔을 시 발생 | 400 - Bad Request| "현재 제안이 [수락] 상태가 아닙니다." |
   
-  </div>
-  
-  ### Status 404
-  <div markdown="1">
-  
+</div>
+  </details>
+  <details>
+  <summary>
+    
+  #### Status - 404
+  </summary>
+<div markdown="1">
+
   | 예외 클래스명 | 발생 상황 | Staus Code | 에러 메세지 |
   | :--: | :--: | :--: | :--: |
   | ItemNotFoundException() | 해당 물품이 없을 경우 발생 | 404 - Not Found | "해당 물품이 존재하지 않습니다." |
   | CommentNotFoundException() | 해당 댓글이 없을 경우 발생 | 404 - Not Found | "해당 댓글이 존재하지 않습니다." |
   | ProposalNotFoundException() | 해당 제안이 없을 경우 발생 | 404 - Not Found | "해당 제안이 존재하지 않습니다." |
   
-  </div>
+</div>
+  </details>
+  <details>
+  <summary>
+    
+  #### Status - 500
+  </summary>
+<div markdown="1">
 
-  ### Status 500
-  <div markdown="1">
-  
   | 예외 클래스명 | 발생 상황 | Staus Code | 에러 메세지 |
   | :--: | :--: | :--: | :--: |
   | ImageUpdateException() | 물품 이미지 등록에 실패하였을 경우 발생 | 500 - Internal Server Error | "이미지 등록과정에서 문제가 발생하였습니다." |
   
-  
-  </div>
+</div>
+  </details>
+============================================================================================
 </details>
 </br>
 
