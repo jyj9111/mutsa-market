@@ -2,15 +2,17 @@ package com.example.mini1.negotiations.service;
 
 import com.example.mini1.common.dto.ResponseDto;
 import com.example.mini1.common.exception.*;
-import com.example.mini1.common.exception.items.ItemNotFoundException;
-import com.example.mini1.common.exception.negotiaitons.ProposalNotFoundException;
-import com.example.mini1.common.exception.negotiaitons.WrongStatusException;
+import com.example.mini1.common.exception.user.NotExistUsernameException;
+import com.example.mini1.items.exception.ItemNotFoundException;
+import com.example.mini1.negotiations.exception.*;
 import com.example.mini1.items.entity.SalesItemEntity;
 import com.example.mini1.items.repository.SalesItemRepository;
 import com.example.mini1.negotiations.dto.NegoInDto;
 import com.example.mini1.negotiations.dto.NegoPageDto;
 import com.example.mini1.negotiations.entity.NegotiationEntity;
 import com.example.mini1.negotiations.repository.NegotiationRepository;
+import com.example.mini1.users.entity.UserEntity;
+import com.example.mini1.users.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,18 +28,21 @@ import java.util.Optional;
 public class NegotiationService {
     private final SalesItemRepository salesItemRepository;
     private final NegotiationRepository negoRepository;
+    private final UserRepository userRepository;
 
     // 제안 등록
-    public ResponseDto createProposal(Long itemId, NegoInDto dto) {
-        if(!salesItemRepository.existsById(itemId))
-            throw new ItemNotFoundException();
+    public ResponseDto createProposal(String username, Long itemId, NegoInDto dto) {
+        Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isEmpty())
+            throw new NotExistUsernameException();
+        UserEntity user = optionalUser.get();
 
-        NegotiationEntity newProposal = new NegotiationEntity();
-        newProposal.setItemId(itemId);
-        newProposal.setWriter(dto.getWriter());
-        newProposal.setPassword(dto.getPassword());
-        newProposal.setSuggestedPrice(dto.getSuggestedPrice());
-        newProposal.setStatus("제안");
+        Optional<SalesItemEntity> optionalItem = salesItemRepository.findById(itemId);
+        if (optionalItem.isEmpty())
+            throw new ItemNotFoundException();
+        SalesItemEntity item = optionalItem.get();
+
+        NegotiationEntity newProposal = NegotiationEntity.ofUserItemDto(user, item, dto);
         negoRepository.save(newProposal);
 
         ResponseDto response = new ResponseDto();
@@ -67,7 +72,7 @@ public class NegotiationService {
     }
 
     // 제안 수정
-    public ResponseDto updateProposal(Long itemId, Long propId, NegoInDto dto) {
+    public ResponseDto updateProposal(String username, Long itemId, Long propId, NegoInDto dto) {
         if(!salesItemRepository.existsById(itemId))
             throw new ItemNotFoundException();
 
@@ -76,13 +81,10 @@ public class NegotiationService {
             throw new ProposalNotFoundException();
 
         NegotiationEntity negoEntity = optionalNegoEntity.get();
+        if (!negoEntity.getUser().getUsername().equals(username))
+            throw new UnAuthNegoEditException();
 
-        if(!negoEntity.getWriter().equals(dto.getWriter()))
-            throw new NotMatchedWriterException();
-        if(!negoEntity.getPassword().equals(dto.getPassword()))
-            throw new NotMatchedPasswordException();
-
-        negoEntity.setSuggestedPrice(dto.getSuggestedPrice());
+        negoEntity.updateNego(dto);
         negoRepository.save(negoEntity);
 
         ResponseDto response = new ResponseDto();
@@ -91,7 +93,7 @@ public class NegotiationService {
     }
 
     // 제안 삭제
-    public ResponseDto deleteProposal(Long itemId, Long propId, NegoInDto dto) {
+    public ResponseDto deleteProposal(String username, Long itemId, Long propId, NegoInDto dto) {
         if(!salesItemRepository.existsById(itemId))
             throw new ItemNotFoundException();
 
@@ -100,11 +102,8 @@ public class NegotiationService {
             throw new ProposalNotFoundException();
 
         NegotiationEntity negoEntity = optionalNegoEntity.get();
-
-        if(!negoEntity.getWriter().equals(dto.getWriter()))
-            throw new NotMatchedWriterException();
-        if(!negoEntity.getPassword().equals(dto.getPassword()))
-            throw new NotMatchedPasswordException();
+        if (!negoEntity.getUser().getUsername().equals(username))
+            throw new UnAuthNegoDeleteException();
 
         negoRepository.deleteById(propId);
 
@@ -114,23 +113,20 @@ public class NegotiationService {
     }
 
     // 제안 수락 or 거절 결정
-    public ResponseDto updateProposalStatus(Long itemId, Long propId, NegoInDto dto) {
+    public ResponseDto updateProposalStatus(String username, Long itemId, Long propId, NegoInDto dto) {
         Optional<SalesItemEntity> optionalItemEntity = salesItemRepository.findById(itemId);
         if(optionalItemEntity.isEmpty())
             throw new ItemNotFoundException();
-
         SalesItemEntity itemEntity = optionalItemEntity.get();
-        if(!itemEntity.getWriter().equals(dto.getWriter()))
-            throw new NotMatchedWriterException();
-        if(!itemEntity.getPassword().equals(dto.getPassword()))
-            throw new NotMatchedPasswordException();
+        if (!itemEntity.getUser().getUsername().equals(username))
+            throw new UnAuthNegoAcceptException();
 
         Optional<NegotiationEntity> optionalNegoEntity = negoRepository.findById(propId);
         if(optionalNegoEntity.isEmpty())
             throw new ProposalNotFoundException();
-
         NegotiationEntity negoEntity = optionalNegoEntity.get();
-        negoEntity.setStatus(dto.getStatus());
+
+        negoEntity.updateStatus(dto);
         negoRepository.save(negoEntity);
 
         ResponseDto response = new ResponseDto();
@@ -139,7 +135,7 @@ public class NegotiationService {
     }
 
     // 구매 확정
-    public ResponseDto updateItemAndProposalStatus(Long itemId, Long propId, NegoInDto dto) {
+    public ResponseDto updateItemAndProposalStatus(String username, Long itemId, Long propId, NegoInDto dto) {
         Optional<SalesItemEntity> optionalItemEntity = salesItemRepository.findById(itemId);
         if(optionalItemEntity.isEmpty())
             throw new ItemNotFoundException();
@@ -150,14 +146,12 @@ public class NegotiationService {
             throw new ProposalNotFoundException();
 
         NegotiationEntity negoEntity = optionalNegoEntity.get();
-        if(!negoEntity.getWriter().equals(dto.getWriter()))
-            throw new NotMatchedWriterException();
-        if(!negoEntity.getPassword().equals(dto.getPassword()))
-            throw new NotMatchedPasswordException();
+        if (!negoEntity.getUser().getUsername().equals(username))
+            throw new UnAuthNegoConfirmException();
         if(!negoEntity.getStatus().equals("수락"))
             throw new WrongStatusException();
 
-        negoEntity.setStatus(dto.getStatus());
+        negoEntity.updateStatus(dto);
         negoEntity = negoRepository.save(negoEntity);
 
         if(negoEntity.getStatus().equals("확정")) {

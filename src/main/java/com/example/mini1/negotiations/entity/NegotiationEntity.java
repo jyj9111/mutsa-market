@@ -1,6 +1,7 @@
 package com.example.mini1.negotiations.entity;
 
 import com.example.mini1.items.entity.SalesItemEntity;
+import com.example.mini1.negotiations.dto.NegoInDto;
 import com.example.mini1.users.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -29,9 +30,20 @@ public class NegotiationEntity {
 
     private String status;
 
-    @Column(nullable = false)
-    private String writer;
+    public static NegotiationEntity ofUserItemDto(UserEntity user, SalesItemEntity item, NegoInDto dto) {
+        NegotiationEntity newNego = new NegotiationEntity();
+        newNego.setUser(user);
+        newNego.setItem(item);
+        newNego.setSuggestedPrice(dto.getSuggestedPrice());
+        newNego.setStatus("제안");
+        return newNego;
+    }
 
-    @Column(nullable = false)
-    private String password;
+    public void updateNego(NegoInDto dto) {
+        this.suggestedPrice = dto.getSuggestedPrice();
+    }
+
+    public void updateStatus(NegoInDto dto) {
+        this.status = dto.getStatus();
+    }
 }

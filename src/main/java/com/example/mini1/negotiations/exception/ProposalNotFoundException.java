@@ -1,4 +1,4 @@
-package com.example.mini1.common.exception.negotiaitons;
+package com.example.mini1.negotiations.exception;
 
 import com.example.mini1.common.exception.status.Status404Exception;
 
