@@ -1,6 +1,7 @@
 package com.example.mini1.items.entity;
 
 import com.example.mini1.comments.entity.CommentEntity;
+import com.example.mini1.items.dto.SalesItemInDto;
 import com.example.mini1.negotiations.entity.NegotiationEntity;
 import com.example.mini1.users.entity.UserEntity;
 import jakarta.persistence.*;
@@ -42,9 +43,22 @@ public class SalesItemEntity {
     @JoinColumn(name = "item_id")
     private List<NegotiationEntity> negotiations = new ArrayList<>();
 
-    @Column(nullable = false)
     private String writer;
-
-    @Column(nullable = false)
     private String password;
+
+    public static SalesItemEntity fromDto(SalesItemInDto dto) {
+        SalesItemEntity newEntity = new SalesItemEntity();
+        newEntity.setTitle(dto.getTitle());
+        newEntity.setDescription(dto.getDescription());
+        newEntity.setMinPriceWanted(dto.getMinPriceWanted());
+        newEntity.setStatus("판매중");
+
+        return newEntity;
+    }
+
+    public void updateItem(SalesItemInDto dto) {
+        this.title = dto.getTitle();
+        this.description = dto.getDescription();
+        this.minPriceWanted = dto.getMinPriceWanted();
+    }
 }

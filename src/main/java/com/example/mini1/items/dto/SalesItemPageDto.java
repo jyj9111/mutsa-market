@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class SalesItemPageDto {
     private Long id;
+    private String username;
     private String title;
     private String description;
     private Long minPriceWanted;
@@ -14,7 +15,10 @@ public class SalesItemPageDto {
 
     public static SalesItemPageDto fromEntity(SalesItemEntity entity) {
         SalesItemPageDto dto = new SalesItemPageDto();
+        String username = entity.getUser().getUsername();
+
         dto.setId(entity.getId());
+        dto.setUsername(username);
         dto.setTitle(entity.getTitle());
         dto.setDescription(entity.getDescription());
         dto.setMinPriceWanted(entity.getMinPriceWanted());

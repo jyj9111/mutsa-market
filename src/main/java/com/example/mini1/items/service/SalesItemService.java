@@ -2,14 +2,16 @@ package com.example.mini1.items.service;
 
 import com.example.mini1.common.dto.ResponseDto;
 import com.example.mini1.common.exception.etc.ImageUpdateException;
-import com.example.mini1.common.exception.items.ItemNotFoundException;
-import com.example.mini1.common.exception.NotMatchedPasswordException;
-import com.example.mini1.common.exception.NotMatchedWriterException;
+import com.example.mini1.items.exception.ItemNotFoundException;
+import com.example.mini1.common.exception.user.NotExistUsernameException;
 import com.example.mini1.items.dto.SalesItemInDto;
 import com.example.mini1.items.dto.SalesItemOutDto;
 import com.example.mini1.items.dto.SalesItemPageDto;
 import com.example.mini1.items.entity.SalesItemEntity;
+import com.example.mini1.items.exception.UnAuthUserException;
 import com.example.mini1.items.repository.SalesItemRepository;
+import com.example.mini1.users.entity.UserEntity;
+import com.example.mini1.users.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -34,18 +36,19 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class SalesItemService {
-    private final SalesItemRepository repository;
+    private final SalesItemRepository itemRepository;
+    private final UserRepository userRepository;
 
     // SalesItem 등록
-    public ResponseDto createSalesItem(SalesItemInDto dto) {
-        SalesItemEntity newEntity = new SalesItemEntity();
-        newEntity.setTitle(dto.getTitle());
-        newEntity.setDescription(dto.getDescription());
-        newEntity.setMinPriceWanted(dto.getMinPriceWanted());
-        newEntity.setWriter(dto.getWriter());
-        newEntity.setPassword(dto.getPassword());
-        newEntity.setStatus("판매중");
-        repository.save(newEntity);
+    public ResponseDto createSalesItem(String username, SalesItemInDto dto) {
+        Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
+        if (optionalUser.isEmpty())
+            throw new NotExistUsernameException();
+        UserEntity user = optionalUser.get();
+
+        SalesItemEntity newEntity = SalesItemEntity.fromDto(dto);
+        newEntity.setUser(user);
+        itemRepository.save(newEntity);
 
         ResponseDto response = new ResponseDto();
         response.setMessage("등록이 완료되었습니다. ");
@@ -55,14 +58,14 @@ public class SalesItemService {
     // SalesItem 전체조회(페이지)
     public Page<SalesItemPageDto> readSalesItemPaged(Integer page, Integer limit) {
         Pageable pageable = PageRequest.of(page, limit, Sort.by("id"));
-        Page<SalesItemEntity> salesItemEntityPage = repository.findAll(pageable);
+        Page<SalesItemEntity> salesItemEntityPage = itemRepository.findAll(pageable);
         Page<SalesItemPageDto> salesItemDtoPage = salesItemEntityPage.map(SalesItemPageDto::fromEntity);
         return salesItemDtoPage;
     }
 
     // SalesItem 단일조회
     public SalesItemOutDto readSalesItem(Long id) {
-        Optional<SalesItemEntity> optionalEntity = repository.findById(id);
+        Optional<SalesItemEntity> optionalEntity = itemRepository.findById(id);
 
         if(optionalEntity.isEmpty())
             throw new ItemNotFoundException();
@@ -71,25 +74,18 @@ public class SalesItemService {
     }
 
     // SalesItem 업데이트
-    public ResponseDto updateSalesItem(Long id, SalesItemInDto dto) {
-        Optional<SalesItemEntity> optionalEntity = repository.findById(id);
-
+    public ResponseDto updateSalesItem(String username, Long id, SalesItemInDto dto) {
+        Optional<SalesItemEntity> optionalEntity = itemRepository.findById(id);
         if(optionalEntity.isEmpty())
             throw new ItemNotFoundException();
 
-        SalesItemEntity entity = optionalEntity.get();
+        SalesItemEntity itemEntity = optionalEntity.get();
+        if (!itemEntity.getUser().getUsername().equals(username)) {
+            throw new UnAuthUserException();
+        }
 
-        if(!dto.getWriter().equals(entity.getWriter()))
-            throw new NotMatchedWriterException();
-        if(!dto.getPassword().equals(entity.getPassword()))
-            throw new NotMatchedPasswordException();
-
-        entity.setTitle(dto.getTitle());
-        entity.setDescription(dto.getDescription());
-        entity.setMinPriceWanted(dto.getMinPriceWanted());
-        entity.setWriter(dto.getWriter());
-        entity.setPassword(dto.getPassword());
-        repository.save(entity);
+        itemEntity.updateItem(dto);
+        itemRepository.save(itemEntity);
 
         ResponseDto response = new ResponseDto();
         response.setMessage("물품이 수정되었습니다.");
@@ -97,38 +93,35 @@ public class SalesItemService {
     }
 
     // 게시글 삭제
-    public ResponseDto deleteSalesItem(Long id, SalesItemInDto dto) {
-        Optional<SalesItemEntity> optionalEntity = repository.findById(id);
+    public ResponseDto deleteSalesItem(String username, Long id) {
+        Optional<SalesItemEntity> optionalEntity = itemRepository.findById(id);
 
         if(optionalEntity.isEmpty())
             throw new ItemNotFoundException();
 
-        SalesItemEntity entity = optionalEntity.get();
-        if(!dto.getWriter().equals(entity.getWriter()))
-            throw new NotMatchedWriterException();
-        if(!dto.getPassword().equals(entity.getPassword()))
-            throw new NotMatchedPasswordException();
+        SalesItemEntity itemEntity = optionalEntity.get();
+        if (!itemEntity.getUser().getUsername().equals(username)) {
+            throw new UnAuthUserException();
+        }
 
         ResponseDto response = new ResponseDto();
-        repository.deleteById(entity.getId());
+        itemRepository.deleteById(itemEntity.getId());
         response.setMessage("물품을 삭제했습니다.");
 
         return response;
     }
 
     // 물품 이미지 업데이트
-    public ResponseDto updateItemImage(Long id, MultipartFile image, String writer, String password) {
-        Optional<SalesItemEntity> optionalEntity = repository.findById(id);
+    public ResponseDto updateItemImage(String username, Long id, MultipartFile image) {
+        Optional<SalesItemEntity> optionalEntity = itemRepository.findById(id);
 
         if(optionalEntity.isEmpty())
             throw new ItemNotFoundException();
 
-        SalesItemEntity entity = optionalEntity.get();
-
-        if(!entity.getWriter().equals(writer))
-            throw new NotMatchedWriterException();
-        if(!entity.getPassword().equals(password))
-            throw new NotMatchedPasswordException();
+        SalesItemEntity itemEntity = optionalEntity.get();
+        if (!itemEntity.getUser().getUsername().equals(username)) {
+            throw new UnAuthUserException();
+        }
 
         String extension = "." + image.getOriginalFilename().split("\\.")[1];
         String imageDir = String.format("./item-images/%d", id);
@@ -152,8 +145,8 @@ public class SalesItemService {
         }
 
         String imageUrl = String.format("/static/%d/%s", id, itemImageName);
-        entity.setImageUrl(imageUrl);
-        repository.save(entity);
+        itemEntity.setImageUrl(imageUrl);
+        itemRepository.save(itemEntity);
 
         ResponseDto response = new ResponseDto();
         response.setMessage("이미지가 등록되었습니다.");
