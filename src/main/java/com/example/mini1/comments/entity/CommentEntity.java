@@ -1,5 +1,7 @@
 package com.example.mini1.comments.entity;
 
+import com.example.mini1.items.entity.SalesItemEntity;
+import com.example.mini1.users.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,8 +13,16 @@ public class CommentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long itemId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
+    @ManyToOne
+    @JoinColumn(name = "item_id")
+    private SalesItemEntity item;
+
+/*    @Column(nullable = false)
+    private Long itemId;*/
 
     @Column(nullable = false)
     private String writer;

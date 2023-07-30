@@ -1,7 +1,14 @@
 package com.example.mini1.users.entity;
 
+import com.example.mini1.comments.entity.CommentEntity;
+import com.example.mini1.items.entity.SalesItemEntity;
+import com.example.mini1.negotiations.entity.NegotiationEntity;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Data
@@ -19,4 +26,16 @@ public class UserEntity {
     private String email;
     private String phone;
     private String city;
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<SalesItemEntity> items = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<CommentEntity> comments = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    private List<NegotiationEntity> negotiations = new ArrayList<>();
 }
