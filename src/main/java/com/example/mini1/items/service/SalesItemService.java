@@ -8,7 +8,7 @@ import com.example.mini1.items.dto.SalesItemInDto;
 import com.example.mini1.items.dto.SalesItemOutDto;
 import com.example.mini1.items.dto.SalesItemPageDto;
 import com.example.mini1.items.entity.SalesItemEntity;
-import com.example.mini1.items.exception.UnAuthUserException;
+import com.example.mini1.items.exception.UnAuthItemUserException;
 import com.example.mini1.items.repository.SalesItemRepository;
 import com.example.mini1.users.entity.UserEntity;
 import com.example.mini1.users.repo.UserRepository;
@@ -81,7 +81,7 @@ public class SalesItemService {
 
         SalesItemEntity itemEntity = optionalEntity.get();
         if (!itemEntity.getUser().getUsername().equals(username)) {
-            throw new UnAuthUserException();
+            throw new UnAuthItemUserException();
         }
 
         itemEntity.updateItem(dto);
@@ -101,7 +101,7 @@ public class SalesItemService {
 
         SalesItemEntity itemEntity = optionalEntity.get();
         if (!itemEntity.getUser().getUsername().equals(username)) {
-            throw new UnAuthUserException();
+            throw new UnAuthItemUserException();
         }
 
         ResponseDto response = new ResponseDto();
@@ -120,7 +120,7 @@ public class SalesItemService {
 
         SalesItemEntity itemEntity = optionalEntity.get();
         if (!itemEntity.getUser().getUsername().equals(username)) {
-            throw new UnAuthUserException();
+            throw new UnAuthItemUserException();
         }
 
         String extension = "." + image.getOriginalFilename().split("\\.")[1];
