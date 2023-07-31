@@ -36,15 +36,11 @@ public class SalesItemEntity {
     private String status;
 
     @OneToMany
-    @JoinColumn(name = "item_id")
     private List<CommentEntity> comments = new ArrayList<>();
 
     @OneToMany
-    @JoinColumn(name = "item_id")
     private List<NegotiationEntity> negotiations = new ArrayList<>();
 
-    private String writer;
-    private String password;
 
     public static SalesItemEntity fromDto(SalesItemInDto dto) {
         SalesItemEntity newEntity = new SalesItemEntity();

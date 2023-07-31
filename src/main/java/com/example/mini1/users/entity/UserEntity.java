@@ -28,14 +28,11 @@ public class UserEntity {
     private String city;
 
     @OneToMany
-    @JoinColumn(name = "user_id")
     private List<SalesItemEntity> items = new ArrayList<>();
 
     @OneToMany
-    @JoinColumn(name = "user_id")
     private List<CommentEntity> comments = new ArrayList<>();
 
     @OneToMany
-    @JoinColumn(name = "user_id")
     private List<NegotiationEntity> negotiations = new ArrayList<>();
 }

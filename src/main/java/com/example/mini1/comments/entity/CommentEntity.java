@@ -22,9 +22,6 @@ public class CommentEntity {
     @JoinColumn(name = "item_id")
     private SalesItemEntity item;
 
-    private String writer;
-    private String password;
-
     private String content;
     private String reply;
 
