@@ -1,22 +1,19 @@
 package com.example.mini1.users.service;
 
 import com.example.mini1.common.dto.ResponseDto;
-import com.example.mini1.common.exception.NotMatchedPasswordException;
-import com.example.mini1.common.exception.user.ExistUsernameException;
-import com.example.mini1.common.exception.user.NotExistUsernameException;
+import com.example.mini1.users.exception.NotMatchedPasswordException;
+import com.example.mini1.users.exception.ExistUsernameException;
+import com.example.mini1.users.exception.NotExistUsernameException;
 import com.example.mini1.security.jwt.JwtTokenUtils;
 import com.example.mini1.users.dto.JwtTokenDto;
 import com.example.mini1.users.dto.UserLoginDto;
 import com.example.mini1.users.dto.UserRegisterDto;
 import com.example.mini1.users.entity.CustomUserDetails;
-import com.example.mini1.users.repo.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @RequiredArgsConstructor

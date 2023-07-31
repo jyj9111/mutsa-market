@@ -1,8 +1,7 @@
 package com.example.mini1.negotiations.service;
 
 import com.example.mini1.common.dto.ResponseDto;
-import com.example.mini1.common.exception.*;
-import com.example.mini1.common.exception.user.NotExistUsernameException;
+import com.example.mini1.users.exception.NotExistUsernameException;
 import com.example.mini1.items.exception.ItemNotFoundException;
 import com.example.mini1.negotiations.exception.*;
 import com.example.mini1.items.entity.SalesItemEntity;

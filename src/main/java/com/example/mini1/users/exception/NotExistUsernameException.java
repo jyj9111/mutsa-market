@@ -1,4 +1,4 @@
-package com.example.mini1.common.exception.user;
+package com.example.mini1.users.exception;
 
 import com.example.mini1.common.exception.status.Status400Exception;
 

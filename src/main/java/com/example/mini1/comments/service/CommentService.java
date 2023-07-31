@@ -8,7 +8,7 @@ import com.example.mini1.comments.exception.UnAuthCommentEditException;
 import com.example.mini1.comments.exception.UnAuthCommentReplyException;
 import com.example.mini1.comments.repository.CommentRepository;
 import com.example.mini1.common.dto.ResponseDto;
-import com.example.mini1.common.exception.user.NotExistUsernameException;
+import com.example.mini1.users.exception.NotExistUsernameException;
 import com.example.mini1.items.entity.SalesItemEntity;
 import com.example.mini1.comments.exception.CommentNotFoundException;
 import com.example.mini1.items.exception.ItemNotFoundException;
@@ -20,9 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 
 import java.util.Optional;
 

@@ -1,9 +1,9 @@
 package com.example.mini1.items.service;
 
 import com.example.mini1.common.dto.ResponseDto;
-import com.example.mini1.common.exception.etc.ImageUpdateException;
+import com.example.mini1.items.exception.ImageUpdateException;
 import com.example.mini1.items.exception.ItemNotFoundException;
-import com.example.mini1.common.exception.user.NotExistUsernameException;
+import com.example.mini1.users.exception.NotExistUsernameException;
 import com.example.mini1.items.dto.SalesItemInDto;
 import com.example.mini1.items.dto.SalesItemOutDto;
 import com.example.mini1.items.dto.SalesItemPageDto;
