@@ -79,10 +79,9 @@ public class NegotiationController {
     public ResponseDto delete(
             Principal principal,
             @PathVariable("itemId") Long itemId,
-            @PathVariable("proposalId") Long propId,
-            @RequestBody NegoInDto dto
+            @PathVariable("proposalId") Long propId
     ) {
         String username = principal.getName();
-        return service.deleteProposal(username, itemId, propId, dto);
+        return service.deleteProposal(username, itemId, propId);
     }
 }

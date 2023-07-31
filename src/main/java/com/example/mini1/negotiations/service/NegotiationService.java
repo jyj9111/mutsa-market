@@ -92,7 +92,7 @@ public class NegotiationService {
     }
 
     // 제안 삭제
-    public ResponseDto deleteProposal(String username, Long itemId, Long propId, NegoInDto dto) {
+    public ResponseDto deleteProposal(String username, Long itemId, Long propId) {
         if(!salesItemRepository.existsById(itemId))
             throw new ItemNotFoundException();
 
