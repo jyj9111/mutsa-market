@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class SalesItemInDto {
-
     @NotNull
     private String title;
     @NotNull
@@ -14,8 +13,5 @@ public class SalesItemInDto {
     @NotNull
     @Min(value = 0, message = "가격은 0원 이상 입력 해주세요")
     private Long minPriceWanted;
-
-    private String writer;
-    private String password;
 
 }

@@ -35,10 +35,10 @@ public class SalesItemEntity {
 
     private String status;
 
-    @OneToMany
+    @OneToMany(mappedBy = "item")
     private List<CommentEntity> comments = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "item")
     private List<NegotiationEntity> negotiations = new ArrayList<>();
 
 

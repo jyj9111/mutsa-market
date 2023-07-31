@@ -15,9 +15,11 @@ public class NegotiationEntity {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @ManyToOne
+    @JoinColumn(name = "item_id")
     private SalesItemEntity item;
 
     @Column(nullable = false)

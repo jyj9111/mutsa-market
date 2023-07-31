@@ -27,12 +27,12 @@ public class UserEntity {
     private String phone;
     private String city;
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<SalesItemEntity> items = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<CommentEntity> comments = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "user")
     private List<NegotiationEntity> negotiations = new ArrayList<>();
 }
