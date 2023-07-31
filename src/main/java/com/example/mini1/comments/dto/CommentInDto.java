@@ -6,12 +6,7 @@ import lombok.Data;
 
 @Data
 public class CommentInDto {
-
     @NotNull
     private String content;
     private String reply;
-
-    private String writer;
-    private String password;
-
 }
