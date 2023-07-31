@@ -30,12 +30,12 @@ public class NegotiationController {
     // 제안 조회
     @GetMapping("/proposals")
     public Page<NegoPageDto> readAll(
+            Principal principal,
             @PathVariable("itemId") Long itemId,
-            @RequestParam("writer") String writer,
-            @RequestParam("password") String password,
             @RequestParam("page") Integer page
     ) {
-        return service.readAllProposal(itemId, writer, password, page);
+        String usernaem = principal.getName();
+        return service.readAllProposal(usernaem, itemId, page);
     }
 
     // 제안 수정

@@ -51,7 +51,7 @@ public class NegotiationService {
     }
 
     // 제안 조회
-    public Page<NegoPageDto> readAllProposal(Long itemId, String writer, String password, Integer page) {
+    public Page<NegoPageDto> readAllProposal(String username, Long itemId, Integer page) {
         Optional<SalesItemEntity> optionalSalesItem = salesItemRepository.findById(itemId);
         if(optionalSalesItem.isEmpty())
             throw new ItemNotFoundException();
@@ -60,11 +60,10 @@ public class NegotiationService {
         Pageable pageable = PageRequest.of(page, 25, Sort.by("id"));
         Page<NegotiationEntity> negoEntityPage;
 
-        if(itemEntity.getWriter().equals(writer)
-                && itemEntity.getPassword().equals(password)) {
+        if(itemEntity.getUser().getUsername().equals(username)) {
             negoEntityPage = negoRepository.findAllByItemId(itemId, pageable);
         } else {
-            negoEntityPage = negoRepository.findAllByItemIdAndWriterEqualsAndPasswordEquals(itemId, writer, password, pageable);
+            negoEntityPage = negoRepository.findAllByItemIdAndUserUsername(itemId, username, pageable);
         }
 
         Page<NegoPageDto> negoDtoPage = negoEntityPage.map(NegoPageDto::fromEntity);
