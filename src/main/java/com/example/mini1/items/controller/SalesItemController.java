@@ -35,7 +35,7 @@ public class SalesItemController {
     }
 
     // 페이지 전체조회
-    @GetMapping
+    @GetMapping("/read")
     public Page<SalesItemPageDto> readAll(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "limit", defaultValue = "20") Integer limit
@@ -44,7 +44,7 @@ public class SalesItemController {
     }
 
     // 단일 조회
-    @GetMapping("{itemId}")
+    @GetMapping("/read/{itemId}")
     public SalesItemOutDto read(@PathVariable("itemId") Long id) {
         return service.readSalesItem(id);
     }

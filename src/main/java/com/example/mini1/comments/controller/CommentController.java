@@ -23,12 +23,12 @@ public class CommentController {
             @PathVariable("itemId") Long itemId,
             @RequestBody CommentInDto dto
             ) {
-        String username = principal.getName();
-        return service.createComment(username, itemId, dto);
+            String username = principal.getName();
+            return service.createComment(username, itemId, dto);
     }
 
     // 댓글 조회 페이지
-    @GetMapping("/comments")
+    @GetMapping("/comments/read")
     public Page<CommentPageDto> readAll(
             @PathVariable("itemId") Long itemId,
             @RequestHeader("page") Integer page) {

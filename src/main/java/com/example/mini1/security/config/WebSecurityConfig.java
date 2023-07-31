@@ -25,14 +25,14 @@ public class WebSecurityConfig {
     ) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        authHttp -> authHttp.
-                        requestMatchers(
-                                "/items/**"
-                        ).authenticated() // 인증된 사용자만
+                        authHttp -> authHttp
                         .requestMatchers(
                                 "/users/login",
-                                "/users/register"
-                        ).anonymous() // 비인증 사용자만
+                                "/users/register",
+                                "/items/read",
+                                "/items/read/{item_id}",
+                                "/items/{item_id}/comments/read"
+                        ).permitAll()
                         .anyRequest()
                         .authenticated()
                 )
