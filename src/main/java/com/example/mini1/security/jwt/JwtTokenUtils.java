@@ -26,6 +26,7 @@ public class JwtTokenUtils {
                 .build();
     }
 
+    // jwt 토큰 생성
     public String generateToken (UserDetails userDetails) {
         Claims jwtClaims = Jwts.claims()
                 .setSubject(userDetails.getUsername())
@@ -38,6 +39,7 @@ public class JwtTokenUtils {
                 .compact();
     }
 
+    // jwt 토큰 유효성검사
     public boolean validateToken(String token) {
         try {
             jwtParser.parseClaimsJws(token);
@@ -48,6 +50,7 @@ public class JwtTokenUtils {
         }
     }
 
+    // jwt 토큰 Claims 디코딩
     public Claims parseClaims(String token) {
         return jwtParser.parseClaimsJws(token).getBody();
     }
