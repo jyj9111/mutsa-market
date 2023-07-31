@@ -32,7 +32,7 @@ public class NegotiationController {
     public Page<NegoPageDto> readAll(
             Principal principal,
             @PathVariable("itemId") Long itemId,
-            @RequestParam("page") Integer page
+            @RequestParam(value = "page", defaultValue = "0") Integer page
     ) {
         String usernaem = principal.getName();
         return service.readAllProposal(usernaem, itemId, page);
