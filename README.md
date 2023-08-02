@@ -18,7 +18,8 @@
 
 ### 📄 참고 ERD
 <br>
-<img width="450" alt="db_erd" src="https://github.com/likelion-backend-5th/MiniProject_Basic_JangYongJin/assets/130991633/365a4264-0c60-4dda-a5b3-6d665b37992e">
+<img width="450" alt="db_erd" src="https://github.com/likelion-backend-5th/Project_1_JangYongJin/assets/130991633/2acdcb07-fafb-40ff-99f1-814261c46de2">
+
 <br>
 </br>
 
