@@ -1,0 +1,937 @@
+{
+	"info": {
+		"_postman_id": "716879cf-ac5a-4d5f-a031-8305a7752b5f",
+		"name": "멋사-미션형프로젝트-1-jyj",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28055527"
+	},
+	"item": [
+		{
+			"name": "회원가입",
+			"item": [
+				{
+					"name": "회원가입-정상",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"gaga\",\r\n    \"password\" : \"1234\",\r\n    \"passwordCheck\" : \"1234\",\r\n    \"email\" : \"gaga@gmail.com\",\r\n    \"phone\" : \"010-1588-1588\",\r\n    \"city\" : \"Suwon\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "회원가입-정상2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"nana\",\r\n    \"password\" : \"1234\",\r\n    \"passwordCheck\" : \"1234\",\r\n    \"email\" : \"nana@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "회원가입-error-비밀번호 불일치",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"gaga\",\r\n    \"password\" : \"1234\",\r\n    \"passwordCheck\" : \"5678\",\r\n    \"email\" : \"gaga@gmail.com\",\r\n    \"phone\" : \"010-1588-1588\",\r\n    \"city\" : \"Suwon\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "회원가입-error-존재하는유저",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"gaga\",\r\n    \"password\" : \"1234\",\r\n    \"passwordCheck\" : \"1234\",\r\n    \"email\" : \"gaga@gmail.com\",\r\n    \"phone\" : \"010-1588-1588\",\r\n    \"city\" : \"Suwon\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "로그인",
+			"item": [
+				{
+					"name": "로그인-정상(jwt 발급) - 1",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"gaga\",\r\n    \"password\" : \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "로그인-정상(jwt 발급) - 2",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"nana\",\r\n    \"password\" : \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "로그인-error-비밀번호 불일치",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"gaga\",\r\n    \"password\" : \"5678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "로그인-error-존재하지 않는 유저",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\" : \"nana\",\r\n    \"password\" : \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/users/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "상품",
+			"item": [
+				{
+					"name": "상품 등록 - 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnYWdhIiwiaWF0IjoxNjkwODEwODkzLCJleHAiOjE2OTA4MTQ0OTN9.Yx5d7EUe1MGU4yuH1K1OnNK4dDOTJuNKMuUaVBY6rp_aWg1jJ3drHSGPNBlP9w8T",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"중고 맥북 팝니다\",\r\n    \"description\": \"2019년 맥북 프로 13인치 모델입니다\",\r\n    \"minPriceWanted\": 1000000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/items",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "상품 등록 - 2",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnYWdhIiwiaWF0IjoxNjkwODA2NTEyLCJleHAiOjE2OTA4MTAxMTJ9.0BKht-ORsg2KMSmsEcty3ipzfcWS4kkwexZTueI6hUum59yThqVjYqCLSqnX3doV",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"콜드브루 드립기 팝니다\",\r\n    \"description\": \"미개봉 1회사용 제품입니다.\",\r\n    \"minPriceWanted\": 20000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/items",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "상품 수정 - 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnYWdhIiwiaWF0IjoxNjkwODA2NTEyLCJleHAiOjE2OTA4MTAxMTJ9.0BKht-ORsg2KMSmsEcty3ipzfcWS4kkwexZTueI6hUum59yThqVjYqCLSqnX3doV",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"중고 맥북 팝니다\",\r\n    \"description\": \"2019년 맥북 프로 13인치 모델입니다\",\r\n    \"minPriceWanted\": 1260000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "상품 이미지 등록 - 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnYWdhIiwiaWF0IjoxNjkwODA2NTEyLCJleHAiOjE2OTA4MTAxMTJ9.0BKht-ORsg2KMSmsEcty3ipzfcWS4kkwexZTueI6hUum59yThqVjYqCLSqnX3doV",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/E:/Dev-Study/temp/나만없어고양이.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/image",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "상품 삭제 - 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnYWdhIiwiaWF0IjoxNjkwODA2NTEyLCJleHAiOjE2OTA4MTAxMTJ9.0BKht-ORsg2KMSmsEcty3ipzfcWS4kkwexZTueI6hUum59yThqVjYqCLSqnX3doV",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/items/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "상품 단일 조회 - 1",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/items/read/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"read",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "상품 전체 조회",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/items/read?page=0&limit=25",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"read"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "limit",
+									"value": "25"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "댓글",
+			"item": [
+				{
+					"name": "댓글 등록 - 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYW5hIiwiaWF0IjoxNjkwODA3NDc1LCJleHAiOjE2OTA4MTEwNzV9.wiYW3a8LhlrSq7QmrNWfqmNABXEjXEe_PdyFXy0fsgL2KXe6pMLdynqPxtLShMsB",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"할인 가능하신가요?\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/comments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "댓글 수정 - 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYW5hIiwiaWF0IjoxNjkwODA3NDc1LCJleHAiOjE2OTA4MTEwNzV9.wiYW3a8LhlrSq7QmrNWfqmNABXEjXEe_PdyFXy0fsgL2KXe6pMLdynqPxtLShMsB",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\": \"50,000원 정도 할인 가능하신가요?\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/comments/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "댓글 삭제 - 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYW5hIiwiaWF0IjoxNjkwODA3NDc1LCJleHAiOjE2OTA4MTEwNzV9.wiYW3a8LhlrSq7QmrNWfqmNABXEjXEe_PdyFXy0fsgL2KXe6pMLdynqPxtLShMsB",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/items/1/comments/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"comments",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "답글 등록 - 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnYWdhIiwiaWF0IjoxNjkwODA3NDAzLCJleHAiOjE2OTA4MTEwMDN9.s9CgE611pSEbyRxrnGZYapxZ4uXPRDKo7EVQCdlyImYYE8fT9o2ML-1gE0NKS8N5",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"reply\": \"힘들 것 같습니다.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/comments/1/reply",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"comments",
+								"1",
+								"reply"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "댓글 전체 조회",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "page",
+								"value": "0",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8080/items/1/comments/read",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"comments",
+								"read"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "구매 제안",
+			"item": [
+				{
+					"name": "제안 등록  - 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYW5hIiwiaWF0IjoxNjkwODA3NTAzLCJleHAiOjE2OTA4MTExMDN9.FPtshkIQMIKnl7z97i62at7TPjqUCg5T782V47CK8nDTxQfjGsT1M6-xwqCbq_FH",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"suggestedPrice\": 1200000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposals",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposals"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "제안 수정 - 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYW5hIiwiaWF0IjoxNjkwODA3NTAzLCJleHAiOjE2OTA4MTExMDN9.FPtshkIQMIKnl7z97i62at7TPjqUCg5T782V47CK8nDTxQfjGsT1M6-xwqCbq_FH",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "mode",
+								"value": "buyer",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"suggestedPrice\": 1180000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposals/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposals",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "제안 삭제 - 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYW5hIiwiaWF0IjoxNjkwODA4MzQwLCJleHAiOjE2OTA4MTE5NDB9.13h8ViWUQYLGgvtdwjh9UAi1ugfsF8oBxrHmLdkBXvRHea2p-ElvMmvh6Eg9JJjo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposals/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposals",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "제안 [수락, 거절] - 판매자",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnYWdhIiwiaWF0IjoxNjkwODA3NDAzLCJleHAiOjE2OTA4MTEwMDN9.s9CgE611pSEbyRxrnGZYapxZ4uXPRDKo7EVQCdlyImYYE8fT9o2ML-1gE0NKS8N5",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "mode",
+								"value": "seller",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"수락\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposals/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposals",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "구매 확정 - 구매자",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYW5hIiwiaWF0IjoxNjkwODA4MzQwLCJleHAiOjE2OTA4MTE5NDB9.13h8ViWUQYLGgvtdwjh9UAi1ugfsF8oBxrHmLdkBXvRHea2p-ElvMmvh6Eg9JJjo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "mode",
+								"value": "end",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"확정\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposals/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposals",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "제안 조회 - 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJnYWdhIiwiaWF0IjoxNjkwODA3NDAzLCJleHAiOjE2OTA4MTEwMDN9.s9CgE611pSEbyRxrnGZYapxZ4uXPRDKo7EVQCdlyImYYE8fT9o2ML-1gE0NKS8N5",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/items/1/proposals?page=0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"items",
+								"1",
+								"proposals"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
