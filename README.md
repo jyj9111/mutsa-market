@@ -460,7 +460,37 @@ _해당 물품에 대한 구매제안을 (구매자) 등록, 수정, 삭제, 구
             "description": "2019년 맥북 프로 13인치 모델입니다",
             "minPriceWanted": 1260000,
             "imageUrl": null,
-            "status": "판매중"
+            "status": "판매중",
+            "comments": [
+                {
+                    "id": 1,
+                    "username": "nana",
+                    "content": "50,000원 정도 할인 가능하신가요?",
+                    "reply": null
+                },
+                {
+                    "id": 2,
+                    "username": "nana",
+                    "content": "할인 가능하신가요?",
+                    "reply": null
+                },
+                {
+                    "id": 3,
+                    "username": "nana",
+                    "content": "할인 가능하신가요?2",
+                    "reply": null
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "username": "nana",
+            "title": "콜드브루 드립기 팝니다",
+            "description": "미개봉 1회사용 제품입니다.",
+            "minPriceWanted": 20000,
+            "imageUrl": null,
+            "status": "판매중",
+            "comments": []
         }
     ],
     "pageable": {
@@ -470,14 +500,14 @@ _해당 물품에 대한 구매제안을 (구매자) 등록, 수정, 삭제, 구
             "unsorted": false
         },
         "offset": 0,
-        "pageSize": 25,
         "pageNumber": 0,
+        "pageSize": 25,
         "unpaged": false,
         "paged": true
     },
     "last": true,
-    "totalElements": 1,
     "totalPages": 1,
+    "totalElements": 2,
     "size": 25,
     "number": 0,
     "sort": {
@@ -486,7 +516,7 @@ _해당 물품에 대한 구매제안을 (구매자) 등록, 수정, 삭제, 구
         "unsorted": false
     },
     "first": true,
-    "numberOfElements": 1,
+    "numberOfElements": 2,
     "empty": false
   }
   ```
@@ -507,12 +537,33 @@ _해당 물품에 대한 구매제안을 (구매자) 등록, 수정, 삭제, 구
   - Body :
   ```json
   {
+    "id": 1,
     "username": "gaga",
     "title": "중고 맥북 팝니다",
     "description": "2019년 맥북 프로 13인치 모델입니다",
     "minPriceWanted": 1260000,
     "imageUrl": null,
-    "status": "판매중"
+    "status": "판매중",
+    "comments": [
+        {
+            "id": 1,
+            "username": "nana",
+            "content": "50,000원 정도 할인 가능하신가요?",
+            "reply": null
+        },
+        {
+            "id": 2,
+            "username": "nana",
+            "content": "할인 가능하신가요?",
+            "reply": null
+        },
+        {
+            "id": 3,
+            "username": "nana",
+            "content": "할인 가능하신가요?2",
+            "reply": null
+        }
+    ]
   }
   ```
 
@@ -1045,9 +1096,8 @@ _해당 물품에 대한 구매제안을 (구매자) 등록, 수정, 삭제, 구
 </br>
 
 ## 3️⃣ 별첨
-- 🟠 Postman 에서 사용 가능한 Test용 Colletion 파일 추가  
-  - `파일이름 : 멋사-미니프로젝트-1-jyj.postman_collection.json`
-    
-  ![postman_import](https://github.com/likelion-backend-5th/MiniProject_Basic_JangYongJin/assets/130991633/82352c4e-c0b0-43f9-bd76-c72de1b3ebdb)
-  - [import] 클릭 >> 위 파일 추가
+- PostmanCollection 추가
+  - `파일이름 : 멋사-미션형프로젝트-1-jyj.postman_collection.json`
+- PR 링크 공유
+  - https://github.com/likelion-backend-5th/PeerReview_11Team/pulls
 
